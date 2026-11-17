@@ -1,236 +1,203 @@
 (() => {
   'use strict';
   const root = document.getElementById('conteudo');
-  const state = { data: null, filter: 'Tudo', search: '', lastPath: null };
-  const icons = { form:'?', elevator:'↑', portal:'@', city:'▱', ai:'*', emergency:'!' };
-  const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[char]));
-  const hrefArticle = story => `#/materia/${encodeURIComponent(story.slug)}`;
-  const hrefDossier = dossier => `#/dossie/${encodeURIComponent(dossier.slug)}`;
-  const articleById = id => state.data.articles.find(a => a.id === id);
-  const dossierById = id => state.data.dossiers.find(d => d.id === id);
-  const allArticles = () => state.data.articles;
-  const demoNote = 'Lorem ipsum para diagramação. Nenhuma ocorrência, contrato ou declaração real é apresentada nesta demonstração.';
-  const demoAlert = () => `<div class="demo-alert" role="note"><span><strong>SIMULAÇÃO EDITORIAL.</strong> ${esc(demoNote)}</span></div>`;
-  function motif(story, featured = false, number = '') {
-    const symbol = icons[story.motif] || '?';
-    if (featured) return `<div class="featured-art" aria-hidden="true"><span class="art-cross">+</span><span class="art-circle"></span><span class="art-coord">${esc(story.id)} / MOCK / 001</span></div>`;
-    return `<div class="card-art" data-motif="${esc(story.motif)}" aria-hidden="true"><span class="art-index">${esc(number || story.id)}</span><span class="art-glyph">${esc(symbol)}</span></div>`;
+  const state = { data: null, filter: 'Tudo', search: '', lastRoute: null };
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const articleUrl = a => `#/materia/${encodeURIComponent(a.slug)}`;
+  const dossierUrl = d => `#/dossie/${encodeURIComponent(d.slug)}`;
+  const dossierFor = id => state.data.dossiers.find(d => d.id === id);
+  const byArticleId = id => state.data.articles.find(a => a.id === id);
+  const meta = text => `<span class="meta">${esc(text)}</span>`;
+  const arrow = '<span aria-hidden="true">↗</span>';
+  const demoWarning = () => '<div class="demo-notice" role="note"><strong>EDIÇÃO DE TESTE</strong><span>Texto Lorem ipsum para diagramação. Nenhum conteúdo corresponde a notícia ou investigação real.</span></div>';
+  const sectionTitle = (number, label, title, aside = '') => `<div class="section-title"><div><span class="meta section-index">${esc(number)} / ${esc(label)}</span><h2>${esc(title)}</h2></div>${aside ? `<p>${esc(aside)}</p>` : ''}</div>`;
+
+  function schematic(id, variant = 'standard') {
+    return `<div class="schematic schematic-${variant}" role="img" aria-label="Arte vetorial abstrata do arquivo de demonstração, não é fotografia">
+      <span class="schematic-top">FIG / ${esc(id)} <span>0xDD — 000</span></span>
+      <div class="schematic-core" aria-hidden="true"><span class="blueprint-frame"></span><span class="blueprint-inner"></span><span class="blueprint-axis"></span><span class="blueprint-index">PL. 01 / 0xDD</span><span class="schematic-dd">DD</span><span class="blueprint-code"><i></i><i></i><i></i><i></i><i></i></span></div>
+      <span class="schematic-bottom">DOCUMENTO / SIMULAÇÃO <span>REFERÊNCIA VISUAL</span></span>
+    </div>`;
   }
-  function storyCard(story, number, small = false) {
-    return `<article class="story-card catalog-card ${small ? 'small' : ''}" data-category="${esc(story.category)}" data-search="${esc((story.title + ' ' + story.deck + ' ' + story.category).toLocaleLowerCase('pt-BR'))}">
-      <a href="${hrefArticle(story)}" aria-label="Ler a matéria fictícia: ${esc(story.title)}">${motif(story, false, number)}</a>
-      <div class="story-content"><div class="card-kicker">${esc(story.category)} <span class="separator">/</span> DEMO</div>
-      <h3><a href="${hrefArticle(story)}">${esc(story.title)}</a></h3><p>${esc(story.deck)}</p>
-      <a class="card-link" href="${hrefArticle(story)}"><span>LER TEXTO DEMO · ${story.minutes} MIN</span><span aria-hidden="true">↗</span></a></div></article>`;
+  function storyRow(a, n) {
+    return `<article class="story-row reveal catalog-card" data-category="${esc(a.category)}" data-search="${esc((a.title+' '+a.deck+' '+a.category).toLocaleLowerCase('pt-BR'))}">
+      <span class="story-row-number">${String(n).padStart(2,'0')} <small>/ ${esc(a.id)}</small></span>
+      <div class="story-row-copy"><span class="meta story-category">${esc(a.category)} <span>· ${esc(a.minutes)} MIN</span></span><h3><a href="${articleUrl(a)}">${esc(a.title)}</a></h3><p>${esc(a.deck)}</p></div>
+      <a href="${articleUrl(a)}" class="row-open" aria-label="Abrir ${esc(a.title)}">↗</a>
+    </article>`;
   }
-  function dossierCard(d) {
-    return `<article class="dossier-card"><span class="dossier-id">${esc(d.id)} / DOSSIÊ MOCK</span>
-      <h3><a href="${hrefDossier(d)}">${esc(d.title)}</a></h3><p>${esc(d.summary)}</p>
-      <a class="card-link" href="${hrefDossier(d)}"><span>${d.storyIds.length} TEXTOS DE EXEMPLO</span><span aria-hidden="true">↗</span></a></article>`;
+  function storyCard(a, n) {
+    return `<article class="compact-story reveal catalog-card" data-category="${esc(a.category)}" data-search="${esc((a.title+' '+a.deck+' '+a.category).toLocaleLowerCase('pt-BR'))}">
+      <div class="compact-meta"><span>DOC.${String(n).padStart(2,'0')}</span><span>${esc(a.category)}</span></div><h3><a href="${articleUrl(a)}">${esc(a.title)}</a></h3><p>${esc(a.deck)}</p><a class="text-link" href="${articleUrl(a)}">ABRIR ARQUIVO ${arrow}</a>
+    </article>`;
   }
-  function utilityLine() {
-    return `<div class="utility-line"><span>DD / SÃO PAULO / SITE CONCEITO</span><strong>SEM PUBLICAÇÕES REAIS</strong><span>VOL. 000 — NOV 2026</span></div>`;
-  }
-  function sectionHeading(pre, name, side) {
-    return `<div class="section-heading"><div><span class="prehead">${esc(pre)}</span><h2>${esc(name)}</h2></div><div class="section-side">${esc(side)}</div></div>`;
+  function dossierCard(d, n) {
+    return `<article class="dossier-card reveal"><div class="dossier-number">D/${String(n).padStart(2,'0')}<span>${esc(d.id)}</span></div><div class="dossier-copy"><span class="meta">COLEÇÃO DEMONSTRATIVA</span><h3><a href="${dossierUrl(d)}">${esc(d.title)}</a></h3><p>${esc(d.summary)}</p></div><div class="dossier-foot"><span>${esc(d.storyIds.length)} TEXTOS MOCK</span><a href="${dossierUrl(d)}" aria-label="Abrir dossiê ${esc(d.title)}">ABRIR ↗</a></div></article>`;
   }
   function home() {
-    const story = allArticles().find(a => a.featured) || allArticles()[0];
-    const next = allArticles().filter(a => a.id !== story.id).slice(0, 3);
-    return `<div class="page-wrap">
-      ${utilityLine()}
-      <section class="hero" aria-labelledby="hero-title"><div class="hero-copy">
-        <div class="hero-stamp"><span class="small-line"></span><span class="eyebrow">SE O REAL JÁ É ABSURDO, DOCUMENTE.</span></div>
-        <h1 id="hero-title" class="hero-title">A REALIDADE NÃO PRECISA DE <em>ROTEIRISTA.</em></h1>
-        <p class="hero-lede">Precisa de fonte. Um jornal independente para investigar os absurdos de verdade, sem perder a capacidade de rir deles. Esta é apenas a edição zero — uma prévia do que o DD pode ser.</p>
-        <div class="hero-actions"><a class="btn btn-primary" href="#/materias">EXPLORAR EDIÇÃO ZERO <span class="arrow">↗</span></a><a class="btn btn-outline" href="#/metodo">COMO INVESTIGAMOS <span class="arrow">→</span></a></div>
-        <span class="mini-note">SEIS TEXTOS LOREM IPSUM. NENHUMA NOTÍCIA PUBLICADA.</span>
-      </div><article class="featured-panel">${motif(story, true)}<div class="featured-content">
-        <div class="card-kicker">CAPA DEMONSTRATIVA <span class="separator">/</span> ${esc(story.category)}</div>
-        <h2><a href="${hrefArticle(story)}">${esc(story.title)}</a></h2>
-        <p>${esc(story.deck)}</p>
-        <a class="card-link" href="${hrefArticle(story)}"><span>LER TEXTO DEMONSTRATIVO</span><span aria-hidden="true">↗</span></a></div></article></section>
-      <section class="section" aria-labelledby="latest-title">${sectionHeading('01 / O ARQUIVO AINDA É MOCK', 'Páginas de demonstração.', 'Texto Lorem ipsum para testar ritmo, navegação e tipografia.')}
-        <div id="latest-title" class="story-grid">${next.map((a, i) => storyCard(a, `00${i+2}`)).join('')}</div>
-        <div style="margin-top:26px;text-align:right"><a href="#/materias" class="link-more">VER AS SEIS HISTÓRIAS <span aria-hidden="true">↗</span></a></div></section>
-      <section class="section method-band" aria-label="Nosso método"><div><span class="eyebrow">02 / MÉTODO ANTES DA MANCHETE</span><h2 class="method-big">MENOS PALPITE.<br/><em>MAIS RASTRO.</em></h2><p>A voz pode ser ácida. A apuração, não. FARPA organiza o trabalho editorial; Rastro separa o que uma fonte diz daquilo que podemos afirmar.</p><a href="#/metodo" class="link-more">CONHEÇA NOSSO MÉTODO ↗</a></div>
-      <div class="method-steps" aria-label="Acrônimo FARPA"><div class="method-tile"><span class="method-letter">F</span><strong>Fatos</strong><small>O que sabemos</small></div><div class="method-tile"><span class="method-letter">A</span><strong>Absurdo</strong><small>O que não fecha</small></div><div class="method-tile"><span class="method-letter">R</span><strong>Responsabilidade</strong><small>Quem responde</small></div><div class="method-tile"><span class="method-letter">P</span><strong>Perspectiva</strong><small>Quem é afetado</small></div><div class="method-tile"><span class="method-letter">A</span><strong>Argumento</strong><small>O que decorre</small></div></div></section>
-      <section class="section">${sectionHeading('03 / COLEÇÕES DE PERGUNTAS', 'Dossiês abertos.', 'Na versão real: temas duradouros, documentos e hipóteses rastreáveis. Aqui: demonstração.')}
-        <div class="dossier-grid">${state.data.dossiers.map(dossierCard).join('')}</div></section>
-      <section class="section issue-band" aria-label="Edição zero"><div><span class="eyebrow" style="color:#151814">EDIÇÃO 000 / EXPERIMENTO ABERTO</span><h2>O mundo pode esperar.<br/>O lançamento, não.</h2><p>Explore o protótipo, confira a navegação e escolha o que merece entrar na próxima versão. Nenhum conteúdo fictício é notícia publicada.</p></div><a href="#/sobre" class="btn btn-outline">SOBRE O DD ↗</a></section>
+    const featured = state.data.articles.find(a => a.featured) || state.data.articles[0];
+    const remaining = state.data.articles.filter(a => a.id !== featured.id);
+    return `<div class="home">
+      <section class="opening" aria-labelledby="opening-title"><div class="shell">
+        <div class="opening-top meta"><span>DD / DOSSIÊ PÚBLICO</span><span>ANO 01 — EDIÇÃO 000</span><span>SÃO PAULO / BRASIL</span></div>
+        <div class="opening-grid"><div class="opening-copy reveal">
+          <span class="kicker"><b>0x</b> UMA PUBLICAÇÃO SOBRE O ABSURDO DOCUMENTADO</span>
+          <h1 id="opening-title">A REALIDADE<br>NÃO PRECISA<br>DE <em>ROTEIRISTA.</em></h1>
+          <div class="opening-intro"><div class="opening-rule"><span>01</span><span>EDITORIAL / 000</span></div><div><p>Precisa de fonte. Um jornal para investigar as contradições do mundo real, sem perder a capacidade de rir delas.</p><div class="opening-actions"><a class="btn btn-amber" href="#/materias">EXPLORAR O ARQUIVO <span>↗</span></a><a class="quiet-link" href="#/metodo">CONHEÇA O MÉTODO ↗</a></div></div></div>
+        </div><aside class="opening-aside reveal">${schematic(featured.id, 'hero')}<a class="opening-feature" href="${articleUrl(featured)}"><span><small>AMOSTRA / 001</small><strong>${esc(featured.title)}</strong></span>${arrow}</a></aside></div>
+        <div class="opening-bottom meta"><span>DEMONSTRAÇÃO DE INTERFACE / SEM NOTÍCIAS REAIS</span><span>SCROLL PARA CONTINUAR ↓</span></div>
+      </div></section>
+      <section class="archive-section paper-section"><div class="shell">
+        ${sectionTitle('01','ARQUIVO', 'O que merece outra olhada.', 'Amostras de diagramação. Nenhuma delas retrata um acontecimento real.')}
+        <div class="archive-layout"><div class="archive-feature reveal"><div class="archive-feature-top"><span>CAPA / DOC.001</span><span>EDIÇÃO ZERO</span></div><h3><a href="${articleUrl(featured)}">${esc(featured.title)}</a></h3><p>${esc(featured.deck)}</p><a class="text-link" href="${articleUrl(featured)}">ACESSAR TEXTO DEMONSTRATIVO ${arrow}</a><div class="archive-feature-index" aria-hidden="true">01</div></div>
+        <div class="archive-list">${remaining.slice(0,3).map((a,i)=>storyRow(a,i+2)).join('')}</div></div>
+        <div class="section-tail"><span>04 DE 06 REGISTROS DEMONSTRATIVOS</span><a href="#/materias">VER O ARQUIVO COMPLETO ↗</a></div>
+      </div></section>
+      <section class="statement-section"><div class="shell statement-inner reveal"><span class="meta amber">INTERLÚDIO / O QUE NOS MOVE</span><p>O absurdo já está nos fatos.<br><em>Não precisamos inventar mais.</em></p><div class="statement-foot"><span>PERGUNTA → FONTE → EVIDÊNCIA → TEXTO</span><a href="#/sobre">SOBRE O PROJETO ↗</a></div></div></section>
+      <section class="method-section"><div class="shell"><div class="method-top reveal"><span class="meta amber">02 / PROCESSO EDITORIAL</span><h2>UM MÉTODO PARA<br><em>DESCONFIAR MELHOR.</em></h2><p>A personalidade pode ser ácida. A apuração precisa ser rigorosa. FARPA organiza a narrativa; Rastro sustenta o que pode ser afirmado.</p></div>
+        <div class="method-system"><div class="method-system-title"><span>FARPA / v0.4</span><span>CINCO PRINCÍPIOS / UMA PERGUNTA DE CADA VEZ</span></div><div class="method-grid">
+        ${[['F','FATOS','O que sabemos'],['A','ABSURDO','O que não fecha'],['R','RESPONSABILIDADE','Quem responde'],['P','PERSPECTIVA','Quem é afetado'],['A','ARGUMENTO','O que decorre']].map((x,i)=>`<div class="method-cell"><span class="method-index">0${i+1}</span><strong>${x[0]}</strong><div><b>${x[1]}</b><small>${x[2]}</small></div></div>`).join('')}</div></div>
+        <a href="#/metodo" class="text-link method-more">ENTENDA A METODOLOGIA COMPLETA ↗</a></div></section>
+      <section class="dossiers-section paper-section"><div class="shell">
+        ${sectionTitle('03','INVESTIGAÇÃO CONTÍNUA','Um tema não cabe numa manchete.','Dossiês são coleções de perguntas que sobrevivem a cada publicação.')}
+        <div class="dossier-grid">${state.data.dossiers.map((d,i)=>dossierCard(d,i+1)).join('')}</div>
+        <div class="section-tail"><span>03 COLEÇÕES / 100% PLACEHOLDER</span><a href="#/dossies">EXPLORAR DOSSIÊS ↗</a></div>
+      </div></section>
+      <section class="closing-section"><div class="shell closing-inner"><span class="meta amber">0xDD / DEPOIS DO FIM</span><h2>FECHE O MUNDO.<br><em>ABRA O PRÓXIMO.</em></h2><div class="closing-row"><p>Entender os absurdos, rir quando couber e continuar. Sem fabricar certezas, sem romantizar o caos.</p><a href="#/sobre" class="btn btn-amber">CONHEÇA O PROJETO ↗</a></div></div></section>
     </div>`;
+  }
+  function pageHeader(section, id, title, lede) {
+    return `<section class="page-heading"><div class="shell"><div class="page-heading-top meta"><span>${esc(section)} / 0xDD</span><span>${esc(id)}</span></div><div class="page-heading-main"><h1>${esc(title)}</h1><p>${esc(lede)}</p></div></div></section>`;
   }
   function catalog() {
-    const categories = ['Tudo', ...new Set(allArticles().map(a => a.category))];
-    return `<div class="page-wrap">
-      <section class="page-intro"><div><span class="eyebrow">ARQUIVO / NÚMERO ZERO</span><h1>MATÉRIAS<span style="color:var(--accent)">.</span></h1><p class="intro-lede">Uma interface pública em desenvolvimento. Os textos abaixo são Lorem ipsum e não correspondem a notícias.</p></div><div class="corner-index" aria-hidden="true">06</div></section>
-      ${demoAlert()}
-      <div class="catalog-toolbar"><div class="filter-set" role="group" aria-label="Filtrar matérias por tema">${categories.map(c => `<button type="button" class="filter-button" data-filter="${esc(c)}" aria-pressed="${c === 'Tudo' ? 'true' : 'false'}">${esc(c)}</button>`).join('')}</div>
-      <label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.6 15.6 5.2 5.2"/></svg><input type="search" id="story-search" autocomplete="off" aria-label="Buscar matérias" placeholder="Buscar nesta edição..." /></label></div>
-      <p id="result-count" class="result-line" aria-live="polite">6 MATÉRIAS DEMONSTRATIVAS</p>
-      <div class="story-grid" id="catalog-grid">${allArticles().map((a,i) => storyCard(a, `00${i+1}`)).join('')}<div class="empty-state" id="empty-results" hidden><strong>Nenhum resultado.</strong> Tente outra palavra ou selecione todos os temas.</div></div>
-      <section class="section issue-band"><div><span class="eyebrow" style="color:#151814">CONTEÚDO E APURAÇÃO</span><h2>Nenhuma notícia real ainda.</h2><p>O projeto publicará apenas textos selecionados e aprovados, com proveniência e revisões.</p></div><a href="#/metodo" class="btn btn-outline">ENTENDER O FLUXO ↗</a></section>
-    </div>`;
+    const categories = ['Tudo', ...new Set(state.data.articles.map(a=>a.category))];
+    return `${pageHeader('ARQUIVO PÚBLICO','ÍNDICE / 001', 'MATÉRIAS.', 'Seis textos Lorem ipsum para testar leitura e navegação. Nenhuma reportagem real nesta edição.')}
+      <div class="paper-surface"><div class="shell catalog-body">${demoWarning()}<div class="catalog-tools"><div class="filter-set" role="group" aria-label="Filtrar por tema">${categories.map(c=>`<button type="button" data-filter="${esc(c)}" aria-pressed="${String(state.filter === c)}">${esc(c)}</button>`).join('')}</div><label class="search-field"><span aria-hidden="true">⌕</span><input id="story-search" type="search" aria-label="Buscar matérias" autocomplete="off" placeholder="BUSCAR NO ARQUIVO"></label></div>
+      <div class="list-heading"><span id="result-count" aria-live="polite">06 REGISTROS</span><span>ORDEM / EDIÇÃO ZERO</span></div>
+      <div id="catalog-grid" class="catalog-list">${state.data.articles.map((a,i)=>storyRow(a,i+1)).join('')}<div id="empty-results" class="empty-state" hidden>Nenhum registro corresponde à pesquisa.</div></div>
+      <div class="endnote">ARQUIVO EM DESENVOLVIMENTO / AS PUBLICAÇÕES REAIS EXIGIRÃO REVISÃO E APROVAÇÃO EDITORIAL</div></div></div>`;
   }
   function articleView(story) {
-    const dossier = dossierById(story.dossierId);
-    const blocks = story.body.map(block => {
-      if(block.type === 'heading') return `<h2>${esc(block.text)}</h2>`;
-      if(block.type === 'pullquote') return `<blockquote>${esc(block.text)}</blockquote>`;
-      return `<p>${esc(block.text)}</p>`;
-    }).join('');
-    return `<div class="page-wrap">
-      <header class="article-header"><nav class="breadcrumbs" aria-label="Você está aqui"><a href="#/inicio">Início</a><span class="sep">/</span><a href="#/materias">Matérias</a><span class="sep">/</span>${esc(story.category)}</nav>
-      <div class="card-kicker" style="margin-top:27px">${esc(story.category)} <span class="separator">/</span> LOREM IPSUM</div>
-      <h1 class="article-title">${esc(story.title)}</h1><p class="article-deck">${esc(story.deck)}</p>
-      <div class="article-meta"><span>${esc(story.author)}</span><span class="meta-divider">✳</span><span>${esc(story.place)}</span><span class="meta-divider">✳</span><span>${esc(story.minutes)} MIN DE LEITURA</span><span class="meta-divider">✳</span><span>${esc(story.id)}</span></div></header>
-      <div class="article-hero-art" data-motif="${esc(story.motif)}" role="img" aria-label="Arte gráfica abstrata de demonstração, sem fotografia real"><span class="poster-symbol" aria-hidden="true">${esc(icons[story.motif])}</span><span class="poster-caption">ARTE CONCEITUAL / NÃO É REGISTRO FOTOGRÁFICO</span></div>
-      <div class="article-layout"><article class="article-body">${demoAlert()}${blocks}
-        <div class="demo-alert" role="note"><span><strong>FIM DA SIMULAÇÃO.</strong> Esta edição contém somente Lorem ipsum. Não representa investigação, fonte ou publicação jornalística do DD.</span></div>
-        <a href="#/materias" class="btn btn-outline">← VOLTAR À EDIÇÃO</a></article>
-      <aside class="article-sidebar"><span class="eyebrow">CADERNO DE APURAÇÃO / MOCK</span><h3>Como testaríamos esta história?</h3><p>As perguntas abaixo são ilustrativas. Nenhum procedimento foi executado.</p><ol>${story.verificationPlan.map(q => `<li>${esc(q)}</li>`).join('')}</ol><hr class="sidebar-rule"/>
-        <span class="eyebrow">ESTADO DEMONSTRATIVO</span><p>Simulação / Sem evidências anexadas / Não publicável como notícia</p><hr class="sidebar-rule"/>
-        <span class="eyebrow">ASSOCIADO A</span><p><a class="link-more" href="${hrefDossier(dossier)}">${esc(dossier.title)} ↗</a></p>
-        <button type="button" class="btn btn-outline" data-action="copy-link" style="margin-top:10px;width:100%">COPIAR LINK ↗</button></aside></div>
-      <section class="section">${sectionHeading('CONTINUE LENDO / FICÇÃO','Outras histórias.', 'Destaques deste protótipo.')}
-        <div class="story-grid">${allArticles().filter(a => a.id !== story.id).slice(0, 3).map((a,i) => storyCard(a, `00${i+1}`,true)).join('')}</div></section>
-    </div>`;
+    const dossier = dossierFor(story.dossierId);
+    const blocks = story.body.map(b=>b.type==='heading'?`<h2>${esc(b.text)}</h2>`:b.type==='pullquote'?`<blockquote>${esc(b.text)}</blockquote>`:`<p>${esc(b.text)}</p>`).join('');
+    return `<section class="article-cover"><div class="shell"><nav class="crumbs" aria-label="Você está aqui"><a href="#/inicio">CAPA</a><span>/</span><a href="#/materias">MATÉRIAS</a><span>/</span><span>${esc(story.id)}</span></nav>
+      <div class="article-cover-layout"><div><span class="kicker"><b>DOC</b> ${esc(story.category)} / LOREM IPSUM</span><h1>${esc(story.title)}</h1><p class="article-deck">${esc(story.deck)}</p><div class="article-cover-meta"><span>${esc(story.author)}</span><span>${esc(story.minutes)} MIN DE LEITURA</span><span>${esc(story.id)} / DEMO</span></div></div><div class="article-cover-figure">${schematic(story.id)}</div></div>
+    </div></section><div class="paper-surface"><div class="shell article-layout"><article class="article-body">${demoWarning()}${blocks}<div class="article-terminal"><strong>FIM DO REGISTRO / DEMONSTRAÇÃO</strong><p>Este documento contém somente texto Lorem ipsum e não apresenta resultados de apuração.</p><a href="#/materias">← VOLTAR AO ARQUIVO</a></div></article>
+      <aside class="article-side"><div class="aside-header"><span>NOTAS DE MÉTODO</span><span>${esc(story.id)}</span></div><h2>Como investigaríamos este assunto?</h2><p>Perguntas ilustrativas; nenhuma verificação realizada.</p><ol>${story.verificationPlan.map(q=>`<li>${esc(q)}</li>`).join('')}</ol><div class="aside-foot"><span class="meta">VÍNCULO / DOSSIÊ MOCK</span><a href="${dossierUrl(dossier)}">${esc(dossier.title)} ↗</a></div><button type="button" class="aside-copy" data-action="copy-link">COPIAR LINK ↗</button></aside></div>
+      <div class="shell related">${sectionTitle('04','CONTINUE EXPLORANDO','Outros registros.')}<div class="compact-grid">${state.data.articles.filter(a=>a.id!==story.id).slice(0,3).map((a,i)=>storyCard(a,i+1)).join('')}</div></div></div>`;
   }
-  function dossierList() {
-    return `<div class="page-wrap"><section class="page-intro"><div><span class="eyebrow">ARQUIVO DE PERGUNTAS / EDIÇÃO ZERO</span><h1>DOSSIÊS<span style="color:var(--accent)">.</span></h1><p class="intro-lede">Uma pergunta pode sobreviver a uma manchete. Aqui ela tem endereço, memória e espaço para mudar de resposta.</p></div><div class="corner-index" aria-hidden="true">03</div></section>
-      ${demoAlert()}<section class="section section-first"><div class="dossier-grid">${state.data.dossiers.map(dossierCard).join('')}</div></section>
-      <section class="section method-band"><div><span class="eyebrow">DOSSIÊ ≠ MATÉRIA</span><h2 class="method-big">UM ASSUNTO.<br/><em>MUITAS PERGUNTAS.</em></h2></div><p style="margin:auto;max-width:650px;font-size:1.15rem">Na operação real, documentos, evidências e acontecimentos podem alimentar vários dossiês. Uma matéria só aparece no site depois da aprovação editorial e da confirmação de entrega. Este catálogo é apenas Lorem ipsum, não o acervo interno.</p></section>
-    </div>`;
+  function dossiers() {
+    return `${pageHeader('COLEÇÕES','ÍNDICE / 002','DOSSIÊS.','Um arquivo de perguntas, documentos e hipóteses — aqui representado apenas por textos de demonstração.')}
+      <div class="paper-surface"><div class="shell dossiers-page">${demoWarning()}<div class="dossier-grid">${state.data.dossiers.map((d,i)=>dossierCard(d,i+1)).join('')}</div><div class="concept-note"><span class="meta amber">DOSSIÊ ≠ MATÉRIA</span><h2>O assunto continua<br>quando a manchete acaba.</h2><p>Na operação real, uma investigação pode produzir várias matérias. O protótipo mantém essas relações sem divulgar dados internos.</p></div></div></div>`;
   }
   function dossierView(d) {
-    return `<div class="page-wrap"><section class="article-header"><nav class="breadcrumbs"><a href="#/inicio">Início</a><span class="sep">/</span><a href="#/dossies">Dossiês</a><span class="sep">/</span>${esc(d.id)}</nav>
-      <div class="eyebrow" style="margin-top:34px">${esc(d.id)} / ${esc(d.eyebrow)}</div><h1 class="dossier-detail-title">${esc(d.title)}</h1>${demoAlert()}</section>
-      <section class="dossier-details"><div><p class="lead">${esc(d.summary)}</p><h2 class="method-big" style="font-size:2rem;margin-top:48px">PERGUNTAS EM ABERTO<span style="color:var(--accent)">.</span></h2><ul class="question-list">${d.questions.map(q => `<li>${esc(q)}</li>`).join('')}</ul></div>
-      <dl class="side-facts"><dt>IDENTIDADE</dt><dd>${esc(d.id)}</dd><dt>ESTADO</dt><dd>Demonstração sem apuração</dd><dt>RECORTE</dt><dd>Sem recorte geográfico (mock)</dd><dt>QUESTÃO CENTRAL</dt><dd>${esc(d.focus)}</dd><dt>CONTEÚDOS</dt><dd>${d.storyIds.length} textos ilustrativos</dd></dl></section>
-      <section class="section">${sectionHeading('ASSOCIADAS / SOMENTE SIMULAÇÕES','Histórias deste dossiê.', 'Nenhuma corresponde a uma matéria publicada.')}
-      <div class="story-grid">${d.storyIds.map((id,i)=>storyCard(articleById(id),`00${i+1}`,true)).join('')}</div></section></div>`;
+    return `<section class="article-cover dossier-cover"><div class="shell"><nav class="crumbs"><a href="#/inicio">CAPA</a><span>/</span><a href="#/dossies">DOSSIÊS</a><span>/</span><span>${esc(d.id)}</span></nav><div class="dossier-cover-content"><span class="kicker"><b>D /</b> ${esc(d.eyebrow)}</span><h1>${esc(d.title)}</h1><p>${esc(d.summary)}</p></div></div></section>
+      <div class="paper-surface"><div class="shell dossier-detail">${demoWarning()}<div class="dossier-detail-grid"><section><span class="meta amber">QUESTÕES / SIMULAÇÃO</span><h2>O que precisamos perguntar.</h2><ol class="question-list">${d.questions.map((q,i)=>`<li><span>${String(i+1).padStart(2,'0')}</span>${esc(q)}</li>`).join('')}</ol></section><aside class="dossier-facts"><span class="meta">FICHA DE ARQUIVO</span><dl><dt>IDENTIFICADOR</dt><dd>${esc(d.id)}</dd><dt>ESTADO</dt><dd>DEMONSTRAÇÃO SEM APURAÇÃO</dd><dt>QUESTÃO CENTRAL</dt><dd>${esc(d.focus)}</dd><dt>CONTEÚDO</dt><dd>${d.storyIds.length} TEXTOS MOCK</dd></dl></aside></div>
+      <div class="related">${sectionTitle('05','ASSOCIADAS','Matérias desta coleção.')}<div class="compact-grid">${d.storyIds.map((id,i)=>storyCard(byArticleId(id),i+1)).join('')}</div></div></div></div>`;
   }
-  function methodView() {
-    return `<div class="page-wrap"><div class="editorial-prose"><span class="eyebrow">TRANSPARÊNCIA / COMO PENSAMOS</span><h1>UMA BOA PERGUNTA NÃO TEM MEDO DE UMA RESPOSTA RUIM.</h1>
-      <p class="lead">Nossa ironia pode ser insolente. A evidência não. O Distopia Documentada adota um método editorial para procurar contradições sem fabricá-las — e um método de rastreabilidade para guardar o que sustenta cada afirmação.</p>
-      <div class="big-quote">“A apuração define o que pode ser afirmado; a narrativa define quando e como apresentar cada afirmação.”</div>
-      <span class="eyebrow">01 / FARPA V0.4</span><h2>A personalidade tem método.</h2><p>FARPA significa <strong>Fatos, Absurdo, Responsabilidade, Perspectiva e Argumento</strong>. O processo começa pelo briefing pré-apuração: pergunta, recorte geográfico e temporal, público, formato provisório, fontes a procurar e riscos. Depois vêm apuração, escolha do ângulo, estrutura narrativa e revisão factual e editorial.</p>
-      <div class="principle-grid"><div class="principle"><span class="index">F / 01</span><h3>Fatos antes do efeito</h3><p>Alegação, hipótese, opinião e fato documentado não são sinônimos.</p></div>
-      <div class="principle"><span class="index">A / 02</span><h3>O absurdo precisa existir</h3><p>A realidade pode contrariar nosso enquadramento inicial. Isso também é resultado.</p></div>
-      <div class="principle"><span class="index">R + P / 03</span><h3>Responsabilidade e pessoas</h3><p>Uma manchete não pode transformar suspeita em culpa nem esquecer quem é afetado.</p></div>
-      <div class="principle"><span class="index">A / 04</span><h3>Um argumento que se sustente</h3><p>Sátira e linguagem forte não substituem explicação e evidência.</p></div></div>
-      <span class="eyebrow">02 / RASTRO V0.1.0</span><h2>Não basta citar um link.</h2><p>No método Rastro, cada <strong>afirmação</strong> pode receber evidências que apoiam, contradizem ou contextualizam. As <strong>hipóteses</strong> vivem separadas dos fatos. Capturas mantêm data, origem e versão. Fontes que reproduzem a mesma informação não viram confirmações independentes por repetição.</p>
-      <p>O método também preserva edições anteriores e correções. Uma atualização não deve reescrever silenciosamente o que foi publicado.</p>
-      <span class="eyebrow">03 / NÃO CONFUNDIR INTERFACE E VERDADE</span><h2>Este site ainda não publica investigações.</h2><p>Os seis textos e os três dossiês desta edição utilizam <strong>Lorem ipsum</strong>. A interface não consulta o SQLite interno, não recebe dados de apuração e não executa a publicação automaticamente. Apenas apresenta o formato futuro, com uma camada pública de dados separada.</p>
-      <p>Antes de uma publicação real, o DD precisará de revisão humana, controle de direitos, privacidade, documentação das fontes e confirmação da entrega. O conteúdo demonstrativo não deve migrar para a base factual.</p>
-      <a href="#/materias" class="btn btn-primary" style="margin-top:20px">VER EXEMPLOS FICTÍCIOS ↗</a>
-    </div></div>`;
+  function method() {
+    return `${pageHeader('TRANSPARÊNCIA','PROCESSO / 003','MÉTODO.','A voz pode ser contundente. A evidência precisa sustentar cada afirmação.')}
+      <div class="paper-surface"><div class="shell prose-shell">${sectionTitle('00','ANTES DE COMEÇAR','Primeiro, a pergunta.')}<p class="prose-lead">A investigação começa pelo briefing: recorte, relevância, fontes, riscos e hipóteses. Uma intuição interessante não é um fato.</p>
+      <div class="prose-rule"><span>FARPA / v0.4</span><span>MÉTODO EDITORIAL</span></div><h2>Uma narrativa com lastro.</h2><p>FARPA significa <strong>Fatos, Absurdo, Responsabilidade, Perspectiva e Argumento</strong>. O processo começa com o briefing pré-apuração e avança para coleta, análise, organização narrativa e revisão editorial.</p>
+      <div class="method-grid method-grid-light">${[['F','FATOS','O que sabemos'],['A','ABSURDO','O que não fecha'],['R','RESPONSABILIDADE','Quem responde'],['P','PERSPECTIVA','Quem é afetado'],['A','ARGUMENTO','O que decorre']].map((x,i)=>`<div class="method-cell"><span class="method-index">0${i+1}</span><strong>${x[0]}</strong><div><b>${x[1]}</b><small>${x[2]}</small></div></div>`).join('')}</div>
+      <div class="prose-rule"><span>RASTRO / v0.1.0</span><span>PROVENIÊNCIA</span></div><h2>Uma fonte não é uma conclusão.</h2><p>No método Rastro, afirmações podem receber evidências de apoio, contradição e contexto. Hipóteses não se confundem com fatos documentados, e fontes dependentes não viram confirmações independentes só por repetição.</p><p>Correções e revisões precisam de registro. Uma edição não deve apagar silenciosamente o que foi publicado anteriormente.</p>
+      <div class="prose-rule"><span>AMBIENTE DE DEMONSTRAÇÃO</span><span>PUBLICAÇÃO / NÃO INICIADA</span></div><h2>Este site não é a base de apuração.</h2><p>Os seis artigos e três dossiês são apenas Lorem ipsum. Nenhuma informação interna, banco SQLite, fonte sensível ou apuração está conectada ao site público. Qualquer publicação real depende de revisão humana, privacidade, direitos e autorização explícita.</p><a href="#/materias" class="btn btn-dark">EXPLORAR O PROTÓTIPO ↗</a></div></div>`;
   }
-  function aboutView() {
-    return `<div class="page-wrap"><div class="editorial-prose"><span class="eyebrow">UM JORNAL SOBRE O MUNDO QUE NÃO PEDE LICENÇA PARA SER ESTRANHO</span><h1>FECHE O MUNDO.<br/><span style="color:var(--accent)">ABRA O PRÓXIMO.</span></h1>
-      <p class="lead">Distopia Documentada é um projeto editorial brasileiro dedicado a entender as contradições que já fazem parte da vida real: poder, tecnologia, cidade, dinheiro, vigilância e os pequenos absurdos de todo dia.</p>
-      <p>A ideia não é produzir uma fila de tragédias, nem transformar cada manchete numa profecia do fim. Queremos entender o que aconteceu, por que importa, quem foi afetado e o que os documentos realmente permitem afirmar — com linguagem clara, crítica e humor quando ele couber.</p>
-      <div class="big-quote">O absurdo é matéria-prima.<br/>A evidência é o filtro.<br/>O humor é a ferramenta.</div>
-      <span class="eyebrow">O QUE VOCÊ VAI ENCONTRAR</span><h2>Matérias, dossiês e perguntas novas.</h2><p>Uma história curta pode valer mais que um relatório extenso. Uma investigação pode levar semanas e produzir vários textos. Um dossiê pode continuar aberto mesmo sem uma pauta pronta. Não temos compromisso com uma cota de indignação — temos compromisso com perguntas relevantes e verificáveis.</p>
-      <span class="eyebrow">SOBRE ESTA VERSÃO</span><h2>É uma maquete. De propósito.</h2><p>Esta edição zero demonstra a identidade visual e o comportamento do site público. Os textos são apenas Lorem ipsum. Não há acontecimentos, pessoas ou documentos retratados nas matérias de exemplo.</p>
-      <p>O acervo interno do DD é separado do site público. Publicações reais dependerão de uma exportação pública revisada, sem dados privados de apuração ou conteúdo não autorizado.</p>
-      <a class="btn btn-primary" href="#/metodo" style="margin-top:20px">COMO FUNCIONA O MÉTODO ↗</a>
-    </div></div>`;
+  function about() {
+    return `${pageHeader('IDENTIDADE','MANIFESTO / 004','O PROJETO.','Feche o mundo. Abra o próximo.')}
+      <div class="paper-surface"><div class="shell prose-shell"><p class="prose-lead">Distopia Documentada é um projeto editorial brasileiro para investigar contradições reais, interpretar os documentos disponíveis e ainda encontrar espaço para o humor.</p>
+      <div class="prose-rule"><span>01 / POSICIONAMENTO</span><span>DOCUMENTAR ANTES DE JULGAR</span></div><h2>Nem distopia de mentira.<br>Nem otimismo automático.</h2><p>O objetivo não é produzir uma fila de tragédias, mas entender o que aconteceu, por que importa e quem foi afetado. Quando os fatos forem absurdos, a ironia deve acompanhar as evidências — nunca substituí-las.</p>
+      <blockquote class="manifesto-quote">O absurdo é matéria-prima.<br>A evidência é o filtro.<br>O humor é a ferramenta.</blockquote>
+      <div class="prose-rule"><span>02 / O QUE CONSTRUÍMOS</span><span>ARQUIVO EM EXPANSÃO</span></div><h2>Matérias. Dossiês. Perguntas.</h2><p>Uma notícia pontual pode merecer uma nota; uma investigação pode permanecer aberta por meses. O DD distingue o relato dos fatos, o trabalho investigativo e a opinião editorial.</p>
+      <div class="prose-rule"><span>03 / SOBRE ESTA DEMONSTRAÇÃO</span><span>ED. 000 / LOREM IPSUM</span></div><h2>Por enquanto, uma maquete.</h2><p>Todos os textos de matérias e dossiês são conteúdo fictício tipográfico. Não há pessoas, acontecimentos, entrevistas nem documentos reais apresentados como apuração.</p><a href="#/metodo" class="btn btn-dark">CONHECER O MÉTODO ↗</a></div></div>`;
   }
-  function notFound() { return `<div class="page-wrap notfound"><span class="eyebrow">ERRO 404 / DOCUMENTO NÃO ENCONTRADO</span><h1>PERDEU O FIO?</h1><p>Esta rota não existe na edição zero.</p><a class="btn btn-primary" href="#/inicio">VOLTAR À CAPA →</a></div>`; }
-  function parseRoute() {
-    const raw = decodeURIComponent((location.hash || '#/inicio').slice(1)).replace(/^\/+/, '');
-    const path = raw.split('?')[0].split('/').filter(Boolean);
-    return path.length ? path : ['inicio'];
+  function notFound() {return `<div class="paper-surface"><div class="shell notfound"><span class="meta amber">ERRO 404 / FORA DO ARQUIVO</span><h1>PERDEU O RASTRO.</h1><p>A página solicitada não existe na edição zero.</p><a class="btn btn-dark" href="#/inicio">VOLTAR À CAPA ↗</a></div></div>`;}
+  function routeParts(){
+    try {return decodeURIComponent((location.hash||'#/inicio').slice(1)).split('?')[0].split('/').filter(Boolean)}
+    catch (_) {return ['404'];}
   }
-  function render() {
-    if (!state.data) return;
-    const [page, ...params] = parseRoute();
-    let html, title, nav;
-    if(page === 'inicio'){html=home();title='Início';nav='inicio';}
-    else if(page === 'materias'){html=catalog();title='Matérias';nav='materias';state.filter='Tudo';state.search='';}
-    else if(page === 'materia'){const story=allArticles().find(a=>a.slug===params[0]);html=story?articleView(story):notFound();title=story?story.title:'Página não encontrada';nav='materias';}
-    else if(page === 'dossies'){html=dossierList();title='Dossiês';nav='dossies';}
-    else if(page === 'dossie'){const dossier=state.data.dossiers.find(d=>d.slug===params[0]);html=dossier?dossierView(dossier):notFound();title=dossier?dossier.title:'Página não encontrada';nav='dossies';}
-    else if(page === 'metodo'){html=methodView();title='Método';nav='metodo';}
-    else if(page === 'sobre'){html=aboutView();title='Sobre';nav='sobre';}
-    else{html=notFound();title='Página não encontrada';nav='';}
-    root.innerHTML = html;
-    document.title = `${title} · Distopia Documentada — DEMO`;
-    for (const link of document.querySelectorAll('[data-nav]')) {
-      if (link.dataset.nav === nav) link.setAttribute('aria-current','page');
-      else link.removeAttribute('aria-current');
-    }
-    const mobile = document.getElementById('mobile-nav');
-    mobile.hidden = true;
+  function render(){
+    if(!state.data) return;
+    const [page='inicio', slug] = routeParts();
+    let html, label, nav=page;
+    if(page==='inicio'){html=home();label='Capa';}
+    else if(page==='materias'){state.filter='Tudo';state.search='';html=catalog();label='Matérias';}
+    else if(page==='materia'){const a=state.data.articles.find(x=>x.slug===slug);html=a?articleView(a):notFound();label=a?a.title:'Não encontrada';nav='materias';}
+    else if(page==='dossies'){html=dossiers();label='Dossiês';}
+    else if(page==='dossie'){const d=state.data.dossiers.find(x=>x.slug===slug);html=d?dossierView(d):notFound();label=d?d.title:'Não encontrado';nav='dossies';}
+    else if(page==='metodo'){html=method();label='Método';}
+    else if(page==='sobre'){html=about();label='O projeto';}
+    else{html=notFound();label='Não encontrado';nav='';}
+    root.innerHTML=html;
+    document.title=`${label} / Distopia Documentada`;
+    document.body.classList.toggle('is-article',page==='materia');
+    document.querySelectorAll('[data-nav]').forEach(el=>el.dataset.nav===nav?el.setAttribute('aria-current','page'):el.removeAttribute('aria-current'));
+    const menu=document.getElementById('mobile-nav');menu.hidden=true;
     document.querySelector('[data-action="menu"]').setAttribute('aria-expanded','false');
-    if (state.lastPath !== location.hash) {window.scrollTo({top:0,behavior:'instant'});state.lastPath=location.hash;}
+    if(state.lastRoute!==location.hash){window.scrollTo({top:0,behavior:'auto'});state.lastRoute=location.hash;}
+    setupReveal();updateReadingProgress();
   }
-  function filterStories() {
-    const cards = [...document.querySelectorAll('.catalog-card')];
-    if(!cards.length) return;
-    const query = state.search.trim().toLocaleLowerCase('pt-BR');
-    let visible=0;
-    for(const card of cards) {
-      const show=(state.filter==='Tudo'||card.dataset.category===state.filter) && card.dataset.search.includes(query);
-      card.hidden=!show;if(show)visible++;
-    }
-    const count=document.getElementById('result-count');
-    if(count)count.textContent = `${visible} ${visible===1?'MATÉRIA DEMONSTRATIVA':'MATÉRIAS DEMONSTRATIVAS'}`;
-    const empty=document.getElementById('empty-results');if(empty)empty.hidden=visible>0;
-    document.querySelectorAll('[data-filter]').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.filter===state.filter)));
+  let observer;
+  function setupReveal(){
+    if(observer) observer.disconnect();
+    const elements=[...root.querySelectorAll('.reveal')];
+    if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){elements.forEach(x=>x.classList.add('visible'));return;}
+    observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:.05,rootMargin:'0px 0px 55px 0px'});
+    elements.forEach(e=>observer.observe(e));
   }
-  function toggleTheme() {
+  function filterStories(){
+    const q=state.search.trim().toLocaleLowerCase('pt-BR');let total=0;
+    root.querySelectorAll('#catalog-grid .catalog-card').forEach(el=>{const ok=(state.filter==='Tudo'||el.dataset.category===state.filter)&&el.dataset.search.includes(q);el.hidden=!ok;if(ok)total++;});
+    root.querySelectorAll('[data-filter]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.filter===state.filter)));
+    const count=document.getElementById('result-count');if(count)count.textContent=`${String(total).padStart(2,'0')} ${total===1?'REGISTRO':'REGISTROS'}`;
+    const empty=document.getElementById('empty-results');if(empty)empty.hidden=total>0;
+  }
+  function updateReadingProgress(){
+    const bar=document.getElementById('reading-progress-bar');if(!bar)return;
+    const article=root.querySelector('.article-body');
+    if(!article){bar.style.transform='scaleX(0)';return;}
+    const y=window.scrollY;const top=article.getBoundingClientRect().top+y;
+    const end=top+article.offsetHeight-window.innerHeight*.35;
+    const value=Math.max(0,Math.min(1,(y-top)/Math.max(1,end-top)));
+    bar.style.transform=`scaleX(${value})`;
+  }
+  function toggleTheme(){
     const next=document.documentElement.dataset.theme==='dark'?'light':'dark';
     document.documentElement.dataset.theme=next;
-    try{localStorage.setItem('dd-site-theme',next);}catch(_e){}
+    try{localStorage.setItem('dd-site-theme',next);}catch(_){}
   }
-  document.addEventListener('click', async event => {
-    const btn=event.target.closest('[data-action], [data-filter]');
-    if(btn?.dataset.filter){state.filter=btn.dataset.filter;filterStories();return;}
-    if(!btn) return;
-    const action=btn.dataset.action;
-    if(action==='skip'){ event.preventDefault(); root.focus(); return; }
-    if(action==='top'){ window.scrollTo({top:0,behavior:'smooth'}); return; }
-    if(action==='theme') toggleTheme();
-    if(action==='menu'){
-      const nav=document.getElementById('mobile-nav');nav.hidden=!nav.hidden;
-      btn.setAttribute('aria-expanded',String(!nav.hidden));
-    }
-    if(action==='search'){
-      if(location.hash!=='#/materias')location.hash='#/materias';
-      requestAnimationFrame(()=>document.getElementById('story-search')?.focus());
-    }
-    if(action==='copy-link'){
-      const text=location.href;
-      try{await navigator.clipboard.writeText(text);btn.textContent='LINK COPIADO ✓';}
-      catch(_e){btn.textContent='CÓPIA INDISPONÍVEL';}
+  document.addEventListener('click',async ev=>{
+    const btn=ev.target.closest('[data-action], [data-filter]');
+    if(!btn)return;
+    if(btn.hasAttribute('data-filter')){state.filter=btn.dataset.filter;filterStories();return;}
+    const a=btn.dataset.action;
+    if(a==='skip'){ev.preventDefault();root.focus();}
+    if(a==='theme')toggleTheme();
+    if(a==='top')window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    if(a==='menu'){const menu=document.getElementById('mobile-nav');menu.hidden=!menu.hidden;btn.setAttribute('aria-expanded',String(!menu.hidden));}
+    if(a==='search')openSearch();
+    if(a==='copy-link'){
+      try{await navigator.clipboard.writeText(location.href);btn.textContent='LINK COPIADO ✓';}
+      catch(_){btn.textContent='CÓPIA INDISPONÍVEL';}
     }
   });
-  document.addEventListener('input', event => {
-    if(event.target.id==='story-search'){state.search=event.target.value;filterStories();}
+  function openSearch(){
+    if(location.hash!=='#/materias') location.hash='#/materias';
+    requestAnimationFrame(()=>document.getElementById('story-search')?.focus());
+  }
+  document.addEventListener('input',ev=>{if(ev.target.id==='story-search'){state.search=ev.target.value;filterStories();}});
+  document.addEventListener('keydown',ev=>{
+    if((ev.ctrlKey||ev.metaKey)&&ev.key.toLowerCase()==='k'){ev.preventDefault();openSearch();}
+    if(ev.key==='Escape'){const nav=document.getElementById('mobile-nav');if(nav&&!nav.hidden){nav.hidden=true;document.querySelector('[data-action="menu"]').setAttribute('aria-expanded','false');}}
   });
-  document.addEventListener('keydown', event => {
-    if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='k'){
-      event.preventDefault();if(location.hash!=='#/materias')location.hash='#/materias';
-      requestAnimationFrame(()=>document.getElementById('story-search')?.focus());
-    }
-    if(event.key==='Escape'){
-      const nav=document.getElementById('mobile-nav');nav.hidden=true;
-      document.querySelector('[data-action="menu"]').setAttribute('aria-expanded','false');
-    }
-  });
+  let scheduled=false;
+  window.addEventListener('scroll',()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{updateReadingProgress();scheduled=false;});},{passive:true});
+  window.addEventListener('resize',updateReadingProgress,{passive:true});
   window.addEventListener('hashchange',render);
-  try{const preferred=localStorage.getItem('dd-site-theme');if(preferred==='light'||preferred==='dark')document.documentElement.dataset.theme=preferred;}catch(_e){}
-  document.getElementById('footer-year').textContent=new Date().getFullYear();
-  fetch('./data/public-demo.json',{cache:'no-store'})
-    .then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();})
-    .then(data=>{
-      if(data.schemaVersion!=='dd.public.v0.1'||data.mode!=='demo'||!Array.isArray(data.articles)||!Array.isArray(data.dossiers)) throw new Error('Contrato de dados de demonstração inválido');
-      state.data=data;render();
-    })
-    .catch(error=>{
-      root.innerHTML=`<div class="page-wrap notfound"><span class="eyebrow">DADOS NÃO CARREGADOS</span><h1>FALTOU O ARQUIVO.</h1><p>Abra o projeto com um servidor HTTP local. Erro: ${esc(error.message)}</p><p><code>python -m http.server 8000</code></p></div>`;
-      console.error('DD site:',error);
-    });
+  document.getElementById('footer-year').textContent=String(new Date().getFullYear());
+  try{const theme=localStorage.getItem('dd-site-theme');if(theme==='dark'||theme==='light')document.documentElement.dataset.theme=theme;}catch(_){}
+  fetch('./data/public-demo.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();}).then(data=>{
+    if(data.schemaVersion!=='dd.public.v0.1'||data.mode!=='demo'||!Array.isArray(data.articles)||!Array.isArray(data.dossiers)) throw new Error('Formato demo inválido');
+    state.data=data;render();
+  }).catch(err=>{root.innerHTML=`<div class="shell load-error"><span class="meta amber">ERRO DE CARREGAMENTO</span><h1>ARQUIVO INDISPONÍVEL.</h1><p>Não foi possível carregar os dados de demonstração. Use um servidor HTTP local para abrir o projeto.</p><code>${esc(err.message)}</code></div>`;});
 })();

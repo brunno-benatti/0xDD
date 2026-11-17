@@ -99,7 +99,7 @@ content = {
     'site': {
         'title': 'Distopia Documentada',
         'tagline': 'Feche o mundo. Abra o próximo.',
-        'version': '0.1.0',
+        'version': '0.3.2-preview',
         'issueLabel': 'EDIÇÃO ZERO',
     },
     'issue': {
