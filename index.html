@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#141615" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Distopia Documentada. Feche o mundo. Abra o próximo. Protótipo editorial com texto Lorem ipsum." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Distopia Documentada — edição zero" />
+  <meta property="og:description" content="O mundo já é estranho o suficiente. Protótipo de site com Lorem ipsum, não reportagens reais." />
+  <meta property="og:image" content="./assets/og.svg" />
+  <title>Distopia Documentada — Feche o mundo. Abra o próximo.</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <script defer src="./assets/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo" data-action="skip">Pular para o conteúdo</a>
+  <div class="demo-ribbon" role="status"><span class="signal-dot" aria-hidden="true"></span> EDIÇÃO ZERO / PROTÓTIPO <span class="ribbon-detail">TEXTOS LOREM IPSUM / NENHUMA NOTÍCIA REAL</span><span class="ribbon-mark" aria-hidden="true">//</span></div>
+  <header class="site-header" id="topo">
+    <div class="header-inner page-wrap">
+      <a href="#/inicio" class="brand" aria-label="Distopia Documentada: início">
+        <span class="brand-mark" aria-hidden="true">D<span class="brand-mark-cut">D</span><span class="brand-plus">+</span></span>
+        <span class="brand-title"><strong>DISTOPIA</strong><strong>DOCUMENTADA<span class="brand-period">.</span></strong><small>FECHE O MUNDO. ABRA O PRÓXIMO.</small></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Navegação principal">
+        <a data-nav="inicio" href="#/inicio">Início</a>
+        <a data-nav="materias" href="#/materias">Matérias</a>
+        <a data-nav="dossies" href="#/dossies">Dossiês</a>
+        <a data-nav="metodo" href="#/metodo">Método</a>
+        <a data-nav="sobre" href="#/sobre">Sobre</a>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="icon-button search-button" data-action="search" aria-label="Abrir busca" title="Buscar (Ctrl+K)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.6 15.6 5.2 5.2"/></svg>
+        </button>
+        <button type="button" class="icon-button theme-button" data-action="theme" aria-label="Alternar tema claro e escuro" title="Alternar tema">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.6A8.5 8.5 0 0 1 8.4 4a8.5 8.5 0 1 0 11.6 11.6Z"/></svg>
+        </button>
+        <button type="button" class="icon-button menu-button" data-action="menu" aria-controls="mobile-nav" aria-expanded="false" aria-label="Abrir menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Navegação para dispositivos móveis" hidden>
+      <a href="#/inicio">Início</a><a href="#/materias">Matérias</a><a href="#/dossies">Dossiês</a><a href="#/metodo">Método</a><a href="#/sobre">Sobre</a>
+    </nav>
+  </header>
+  <main id="conteudo" tabindex="-1" aria-live="polite"><div class="page-wrap loading-shell"><span class="mono eyebrow">CARREGANDO / EDIÇÃO ZERO</span></div></main>
+  <footer class="site-footer">
+    <div class="page-wrap footer-top">
+      <div class="footer-brand"><div class="footer-monogram">DD<span>+</span></div><p>O mundo não precisa de mais certezas fáceis.<br />Precisa de perguntas melhores.</p></div>
+      <div class="footer-links"><span class="eyebrow">NAVEGUE</span><a href="#/inicio">Início</a><a href="#/materias">Matérias</a><a href="#/dossies">Dossiês</a></div>
+      <div class="footer-links"><span class="eyebrow">ENTENDA</span><a href="#/metodo">Método editorial</a><a href="#/sobre">O projeto</a><a href="./data/public-demo.json" target="_blank" rel="noopener noreferrer">Dados de demonstração</a></div>
+    </div>
+    <div class="page-wrap footer-bottom"><span>© DD <span id="footer-year">2026</span> — DISTOPIA DOCUMENTADA</span><span class="footer-warning">PROTÓTIPO COM LOREM IPSUM • NENHUMA MATÉRIA REAL PUBLICADA</span><button type="button" data-action="top" class="back-top">VOLTAR AO TOPO ↑</button></div>
+  </footer>
+  <noscript><div class="noscript">Este protótipo precisa de JavaScript para mostrar o conteúdo. Os dados estão disponíveis em <a href="./data/public-demo.json">public-demo.json</a>.</div></noscript>
+</body>
+</html>

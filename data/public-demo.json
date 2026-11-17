@@ -1,0 +1,386 @@
+{
+  "schemaVersion": "dd.public.v0.1",
+  "mode": "demo",
+  "contentWarning": "Conteúdo demonstrativo em Lorem ipsum; não representa notícias, dossiês ou fontes reais.",
+  "site": {
+    "title": "Distopia Documentada",
+    "tagline": "Feche o mundo. Abra o próximo.",
+    "version": "0.1.0",
+    "issueLabel": "EDIÇÃO ZERO"
+  },
+  "issue": {
+    "id": "MOCK-000",
+    "label": "NÚMERO 000",
+    "title": "Lorem ipsum dolor sit amet.",
+    "description": "Texto de preenchimento e layout demonstrativo. Nenhum conteúdo factual.",
+    "storyIds": [
+      "MOCK-A01",
+      "MOCK-A02",
+      "MOCK-A03",
+      "MOCK-A04",
+      "MOCK-A05",
+      "MOCK-A06"
+    ]
+  },
+  "articles": [
+    {
+      "id": "MOCK-A01",
+      "slug": "lorem-ipsum-dolor-sit-amet",
+      "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "deck": "Donec varius, nulla a facilisis aliquet, quam metus viverra nibh, eget blandit neque tortor eget leo. Aenean tristique elit quis dui viverra, eget sagittis lacus faucibus. Fus…",
+      "category": "Pequenos absurdos",
+      "dossierId": "MOCK-D01",
+      "featured": true,
+      "motif": "form",
+      "minutes": 5,
+      "author": "Redação · placeholder",
+      "place": "DIAGRAMAÇÃO / MOCK",
+      "dateLabel": "EDIÇÃO ZERO",
+      "provenance": "LOREM IPSUM / SEM FONTES REAIS",
+      "note": "Texto Lorem ipsum utilizado exclusivamente para testar tipografia, navegação e arquitetura de conteúdo. Não representa acontecimento, entrevista, documento, evidência nem publicação jornalística.",
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Praesent in diam libero. Sed vulputate sapien in purus sollicitudin, vel ullamcorper justo faucibus. Maecenas dignissim magna eget dolor consequat, quis elementum arcu rutrum. Integer vitae consectetur sapien, sit amet imperdiet nunc. Suspendisse id nisi vitae odio consectetur faucibus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aliquam erat volutpat. Vestibulum pretium tempor sapien, vitae pellentesque sem suscipit et. Cras vestibulum, urna a ultricies blandit, lorem mi vestibulum urna, sed porta tellus turpis ac justo. Nulla facilisi. Proin non aliquam mi, eget pretium lectus."
+        },
+        {
+          "type": "heading",
+          "text": "Vestibulum ante ipsum primis"
+        },
+        {
+          "type": "paragraph",
+          "text": "Donec varius, nulla a facilisis aliquet, quam metus viverra nibh, eget blandit neque tortor eget leo. Aenean tristique elit quis dui viverra, eget sagittis lacus faucibus. Fusce sit amet nulla eu quam malesuada pellentesque vitae in nunc."
+        },
+        {
+          "type": "pullquote",
+          "text": "Praesent sollicitudin massa id lectus ultrices, vitae placerat odio luctus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Curabitur tempor sem nec est pretium, ac varius nunc lacinia. Etiam quis arcu mauris. Nam nec vulputate ipsum. Vestibulum laoreet magna enim, eu tempor nunc malesuada vitae. Integer consequat urna eget risus mollis dignissim."
+        },
+        {
+          "type": "paragraph",
+          "text": "Maecenas convallis ultricies sem, sed tempus magna aliquam vitae. Pellentesque in mauris vel ipsum fermentum auctor. Vivamus luctus neque eu finibus cursus. Etiam vestibulum arcu eu odio fringilla aliquet."
+        }
+      ],
+      "verificationPlan": [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+        "Integer tempor neque sed lectus aliquet, sed congue orci elementum?",
+        "Praesent vel lectus at urna aliquet consequat?"
+      ]
+    },
+    {
+      "id": "MOCK-A02",
+      "slug": "praesent-vitae-consequat",
+      "title": "Praesent vitae consequat sem. Integer viverra eros.",
+      "deck": "Curabitur tempor sem nec est pretium, ac varius nunc lacinia. Etiam quis arcu mauris. Nam nec vulputate ipsum. Vestibulum laoreet magna enim, eu tempor nunc malesuada vitae. I…",
+      "category": "Tecnologia & poder",
+      "dossierId": "MOCK-D02",
+      "featured": false,
+      "motif": "elevator",
+      "minutes": 6,
+      "author": "Redação · placeholder",
+      "place": "DIAGRAMAÇÃO / MOCK",
+      "dateLabel": "EDIÇÃO ZERO",
+      "provenance": "LOREM IPSUM / SEM FONTES REAIS",
+      "note": "Texto Lorem ipsum utilizado exclusivamente para testar tipografia, navegação e arquitetura de conteúdo. Não representa acontecimento, entrevista, documento, evidência nem publicação jornalística.",
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Aliquam erat volutpat. Vestibulum pretium tempor sapien, vitae pellentesque sem suscipit et. Cras vestibulum, urna a ultricies blandit, lorem mi vestibulum urna, sed porta tellus turpis ac justo. Nulla facilisi. Proin non aliquam mi, eget pretium lectus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Donec varius, nulla a facilisis aliquet, quam metus viverra nibh, eget blandit neque tortor eget leo. Aenean tristique elit quis dui viverra, eget sagittis lacus faucibus. Fusce sit amet nulla eu quam malesuada pellentesque vitae in nunc."
+        },
+        {
+          "type": "heading",
+          "text": "Aliquam dignissim lorem at sapien"
+        },
+        {
+          "type": "paragraph",
+          "text": "Curabitur tempor sem nec est pretium, ac varius nunc lacinia. Etiam quis arcu mauris. Nam nec vulputate ipsum. Vestibulum laoreet magna enim, eu tempor nunc malesuada vitae. Integer consequat urna eget risus mollis dignissim."
+        },
+        {
+          "type": "pullquote",
+          "text": "Lorem ipsum dolor sit amet. Curabitur non ullamcorper eros, sed consequat tellus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Maecenas convallis ultricies sem, sed tempus magna aliquam vitae. Pellentesque in mauris vel ipsum fermentum auctor. Vivamus luctus neque eu finibus cursus. Etiam vestibulum arcu eu odio fringilla aliquet."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam feugiat, justo id iaculis ultrices, urna lectus consequat nulla, et feugiat risus neque ac justo. Sed condimentum ipsum sed metus venenatis, at eleifend orci varius. Vivamus interdum ante eget odio finibus, ut facilisis nunc auctor."
+        }
+      ],
+      "verificationPlan": [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+        "Integer tempor neque sed lectus aliquet, sed congue orci elementum?",
+        "Praesent vel lectus at urna aliquet consequat?"
+      ]
+    },
+    {
+      "id": "MOCK-A03",
+      "slug": "aliquam-erat-volutpat",
+      "title": "Aliquam erat volutpat. Vestibulum ante ipsum primis.",
+      "deck": "Maecenas convallis ultricies sem, sed tempus magna aliquam vitae. Pellentesque in mauris vel ipsum fermentum auctor. Vivamus luctus neque eu finibus cursus. Etiam vestibulum a…",
+      "category": "Estado digital",
+      "dossierId": "MOCK-D02",
+      "featured": false,
+      "motif": "portal",
+      "minutes": 4,
+      "author": "Redação · placeholder",
+      "place": "DIAGRAMAÇÃO / MOCK",
+      "dateLabel": "EDIÇÃO ZERO",
+      "provenance": "LOREM IPSUM / SEM FONTES REAIS",
+      "note": "Texto Lorem ipsum utilizado exclusivamente para testar tipografia, navegação e arquitetura de conteúdo. Não representa acontecimento, entrevista, documento, evidência nem publicação jornalística.",
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Donec varius, nulla a facilisis aliquet, quam metus viverra nibh, eget blandit neque tortor eget leo. Aenean tristique elit quis dui viverra, eget sagittis lacus faucibus. Fusce sit amet nulla eu quam malesuada pellentesque vitae in nunc."
+        },
+        {
+          "type": "paragraph",
+          "text": "Curabitur tempor sem nec est pretium, ac varius nunc lacinia. Etiam quis arcu mauris. Nam nec vulputate ipsum. Vestibulum laoreet magna enim, eu tempor nunc malesuada vitae. Integer consequat urna eget risus mollis dignissim."
+        },
+        {
+          "type": "heading",
+          "text": "Integer consequat urna eget risus"
+        },
+        {
+          "type": "paragraph",
+          "text": "Maecenas convallis ultricies sem, sed tempus magna aliquam vitae. Pellentesque in mauris vel ipsum fermentum auctor. Vivamus luctus neque eu finibus cursus. Etiam vestibulum arcu eu odio fringilla aliquet."
+        },
+        {
+          "type": "pullquote",
+          "text": "Praesent sollicitudin massa id lectus ultrices, vitae placerat odio luctus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam feugiat, justo id iaculis ultrices, urna lectus consequat nulla, et feugiat risus neque ac justo. Sed condimentum ipsum sed metus venenatis, at eleifend orci varius. Vivamus interdum ante eget odio finibus, ut facilisis nunc auctor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Praesent in diam libero. Sed vulputate sapien in purus sollicitudin, vel ullamcorper justo faucibus. Maecenas dignissim magna eget dolor consequat, quis elementum arcu rutrum. Integer vitae consectetur sapien, sit amet imperdiet nunc. Suspendisse id nisi vitae odio consectetur faucibus."
+        }
+      ],
+      "verificationPlan": [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+        "Integer tempor neque sed lectus aliquet, sed congue orci elementum?",
+        "Praesent vel lectus at urna aliquet consequat?"
+      ]
+    },
+    {
+      "id": "MOCK-A04",
+      "slug": "donec-porttitor-ligula",
+      "title": "Donec porttitor ligula sed lacus volutpat luctus.",
+      "deck": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam feugiat, justo id iaculis ultrices, urna lectus consequat nulla, et feugiat risus neque ac justo. Sed condiment…",
+      "category": "Cidade prometida",
+      "dossierId": "MOCK-D03",
+      "featured": false,
+      "motif": "city",
+      "minutes": 5,
+      "author": "Redação · placeholder",
+      "place": "DIAGRAMAÇÃO / MOCK",
+      "dateLabel": "EDIÇÃO ZERO",
+      "provenance": "LOREM IPSUM / SEM FONTES REAIS",
+      "note": "Texto Lorem ipsum utilizado exclusivamente para testar tipografia, navegação e arquitetura de conteúdo. Não representa acontecimento, entrevista, documento, evidência nem publicação jornalística.",
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Curabitur tempor sem nec est pretium, ac varius nunc lacinia. Etiam quis arcu mauris. Nam nec vulputate ipsum. Vestibulum laoreet magna enim, eu tempor nunc malesuada vitae. Integer consequat urna eget risus mollis dignissim."
+        },
+        {
+          "type": "paragraph",
+          "text": "Maecenas convallis ultricies sem, sed tempus magna aliquam vitae. Pellentesque in mauris vel ipsum fermentum auctor. Vivamus luctus neque eu finibus cursus. Etiam vestibulum arcu eu odio fringilla aliquet."
+        },
+        {
+          "type": "heading",
+          "text": "Vestibulum ante ipsum primis"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam feugiat, justo id iaculis ultrices, urna lectus consequat nulla, et feugiat risus neque ac justo. Sed condimentum ipsum sed metus venenatis, at eleifend orci varius. Vivamus interdum ante eget odio finibus, ut facilisis nunc auctor."
+        },
+        {
+          "type": "pullquote",
+          "text": "Lorem ipsum dolor sit amet. Curabitur non ullamcorper eros, sed consequat tellus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Praesent in diam libero. Sed vulputate sapien in purus sollicitudin, vel ullamcorper justo faucibus. Maecenas dignissim magna eget dolor consequat, quis elementum arcu rutrum. Integer vitae consectetur sapien, sit amet imperdiet nunc. Suspendisse id nisi vitae odio consectetur faucibus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aliquam erat volutpat. Vestibulum pretium tempor sapien, vitae pellentesque sem suscipit et. Cras vestibulum, urna a ultricies blandit, lorem mi vestibulum urna, sed porta tellus turpis ac justo. Nulla facilisi. Proin non aliquam mi, eget pretium lectus."
+        }
+      ],
+      "verificationPlan": [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+        "Integer tempor neque sed lectus aliquet, sed congue orci elementum?",
+        "Praesent vel lectus at urna aliquet consequat?"
+      ]
+    },
+    {
+      "id": "MOCK-A05",
+      "slug": "curabitur-varius-sapien",
+      "title": "Curabitur varius sapien at nulla fermentum tempor.",
+      "deck": "Praesent in diam libero. Sed vulputate sapien in purus sollicitudin, vel ullamcorper justo faucibus. Maecenas dignissim magna eget dolor consequat, quis elementum arcu rutrum.…",
+      "category": "Tecnologia & poder",
+      "dossierId": "MOCK-D02",
+      "featured": false,
+      "motif": "ai",
+      "minutes": 6,
+      "author": "Redação · placeholder",
+      "place": "DIAGRAMAÇÃO / MOCK",
+      "dateLabel": "EDIÇÃO ZERO",
+      "provenance": "LOREM IPSUM / SEM FONTES REAIS",
+      "note": "Texto Lorem ipsum utilizado exclusivamente para testar tipografia, navegação e arquitetura de conteúdo. Não representa acontecimento, entrevista, documento, evidência nem publicação jornalística.",
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Maecenas convallis ultricies sem, sed tempus magna aliquam vitae. Pellentesque in mauris vel ipsum fermentum auctor. Vivamus luctus neque eu finibus cursus. Etiam vestibulum arcu eu odio fringilla aliquet."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam feugiat, justo id iaculis ultrices, urna lectus consequat nulla, et feugiat risus neque ac justo. Sed condimentum ipsum sed metus venenatis, at eleifend orci varius. Vivamus interdum ante eget odio finibus, ut facilisis nunc auctor."
+        },
+        {
+          "type": "heading",
+          "text": "Aliquam dignissim lorem at sapien"
+        },
+        {
+          "type": "paragraph",
+          "text": "Praesent in diam libero. Sed vulputate sapien in purus sollicitudin, vel ullamcorper justo faucibus. Maecenas dignissim magna eget dolor consequat, quis elementum arcu rutrum. Integer vitae consectetur sapien, sit amet imperdiet nunc. Suspendisse id nisi vitae odio consectetur faucibus."
+        },
+        {
+          "type": "pullquote",
+          "text": "Praesent sollicitudin massa id lectus ultrices, vitae placerat odio luctus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aliquam erat volutpat. Vestibulum pretium tempor sapien, vitae pellentesque sem suscipit et. Cras vestibulum, urna a ultricies blandit, lorem mi vestibulum urna, sed porta tellus turpis ac justo. Nulla facilisi. Proin non aliquam mi, eget pretium lectus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Donec varius, nulla a facilisis aliquet, quam metus viverra nibh, eget blandit neque tortor eget leo. Aenean tristique elit quis dui viverra, eget sagittis lacus faucibus. Fusce sit amet nulla eu quam malesuada pellentesque vitae in nunc."
+        }
+      ],
+      "verificationPlan": [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+        "Integer tempor neque sed lectus aliquet, sed congue orci elementum?",
+        "Praesent vel lectus at urna aliquet consequat?"
+      ]
+    },
+    {
+      "id": "MOCK-A06",
+      "slug": "maecenas-fringilla-felis",
+      "title": "Maecenas fringilla felis a ante laoreet tincidunt.",
+      "deck": "Aliquam erat volutpat. Vestibulum pretium tempor sapien, vitae pellentesque sem suscipit et. Cras vestibulum, urna a ultricies blandit, lorem mi vestibulum urna, sed porta tel…",
+      "category": "Pequenos absurdos",
+      "dossierId": "MOCK-D01",
+      "featured": false,
+      "motif": "emergency",
+      "minutes": 4,
+      "author": "Redação · placeholder",
+      "place": "DIAGRAMAÇÃO / MOCK",
+      "dateLabel": "EDIÇÃO ZERO",
+      "provenance": "LOREM IPSUM / SEM FONTES REAIS",
+      "note": "Texto Lorem ipsum utilizado exclusivamente para testar tipografia, navegação e arquitetura de conteúdo. Não representa acontecimento, entrevista, documento, evidência nem publicação jornalística.",
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam feugiat, justo id iaculis ultrices, urna lectus consequat nulla, et feugiat risus neque ac justo. Sed condimentum ipsum sed metus venenatis, at eleifend orci varius. Vivamus interdum ante eget odio finibus, ut facilisis nunc auctor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Praesent in diam libero. Sed vulputate sapien in purus sollicitudin, vel ullamcorper justo faucibus. Maecenas dignissim magna eget dolor consequat, quis elementum arcu rutrum. Integer vitae consectetur sapien, sit amet imperdiet nunc. Suspendisse id nisi vitae odio consectetur faucibus."
+        },
+        {
+          "type": "heading",
+          "text": "Integer consequat urna eget risus"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aliquam erat volutpat. Vestibulum pretium tempor sapien, vitae pellentesque sem suscipit et. Cras vestibulum, urna a ultricies blandit, lorem mi vestibulum urna, sed porta tellus turpis ac justo. Nulla facilisi. Proin non aliquam mi, eget pretium lectus."
+        },
+        {
+          "type": "pullquote",
+          "text": "Lorem ipsum dolor sit amet. Curabitur non ullamcorper eros, sed consequat tellus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Donec varius, nulla a facilisis aliquet, quam metus viverra nibh, eget blandit neque tortor eget leo. Aenean tristique elit quis dui viverra, eget sagittis lacus faucibus. Fusce sit amet nulla eu quam malesuada pellentesque vitae in nunc."
+        },
+        {
+          "type": "paragraph",
+          "text": "Curabitur tempor sem nec est pretium, ac varius nunc lacinia. Etiam quis arcu mauris. Nam nec vulputate ipsum. Vestibulum laoreet magna enim, eu tempor nunc malesuada vitae. Integer consequat urna eget risus mollis dignissim."
+        }
+      ],
+      "verificationPlan": [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+        "Integer tempor neque sed lectus aliquet, sed congue orci elementum?",
+        "Praesent vel lectus at urna aliquet consequat?"
+      ]
+    }
+  ],
+  "dossiers": [
+    {
+      "id": "MOCK-D01",
+      "slug": "lorem-ipsum",
+      "title": "Lorem ipsum dolor sit amet",
+      "eyebrow": "COLEÇÃO 01 / DEMONSTRAÇÃO",
+      "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam feugiat, justo id iaculis ultrices, urna lectus consequat nulla, et feugiat risus neque ac justo. Sed condimentum ipsum sed metus v…",
+      "focus": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "storyIds": [
+        "MOCK-A01",
+        "MOCK-A06"
+      ],
+      "questions": [
+        "Lorem ipsum dolor sit amet?",
+        "Praesent vitae ornare lorem?",
+        "Nulla facilisi, curabitur vitae felis?"
+      ]
+    },
+    {
+      "id": "MOCK-D02",
+      "slug": "praesent-vitae",
+      "title": "Praesent vitae consequat sem",
+      "eyebrow": "COLEÇÃO 02 / DEMONSTRAÇÃO",
+      "summary": "Praesent in diam libero. Sed vulputate sapien in purus sollicitudin, vel ullamcorper justo faucibus. Maecenas dignissim magna eget dolor consequat, quis elementum arcu rutrum. Integer vitae conse…",
+      "focus": "Praesent in diam libero, sed vulputate sapien.",
+      "storyIds": [
+        "MOCK-A02",
+        "MOCK-A03",
+        "MOCK-A05"
+      ],
+      "questions": [
+        "Vestibulum ante ipsum primis?",
+        "Donec porttitor ligula?",
+        "Maecenas dignissim magna eget dolor?"
+      ]
+    },
+    {
+      "id": "MOCK-D03",
+      "slug": "aliquam-erat",
+      "title": "Aliquam erat volutpat",
+      "eyebrow": "COLEÇÃO 03 / DEMONSTRAÇÃO",
+      "summary": "Aliquam erat volutpat. Vestibulum pretium tempor sapien, vitae pellentesque sem suscipit et. Cras vestibulum, urna a ultricies blandit, lorem mi vestibulum urna, sed porta tellus turpis ac justo.…",
+      "focus": "Aliquam erat volutpat, vestibulum pretium tempor sapien.",
+      "storyIds": [
+        "MOCK-A04"
+      ],
+      "questions": [
+        "Aenean tristique elit quis dui viverra?",
+        "Fusce sit amet nulla?",
+        "Nullam feugiat justo id iaculis?"
+      ]
+    }
+  ]
+}
